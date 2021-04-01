@@ -53,6 +53,11 @@ function CoronaBarChartContainer() {
     }
   }
 
+  const handleReset = () => {
+    setData(mockCoronaData)
+    setIteration(0)
+  }
+
   return (
     <div className={styles.root}>
       <div className={styles.header}>
@@ -65,6 +70,7 @@ function CoronaBarChartContainer() {
         <button onClick={() => setStart(!start)}>
           {start ? 'Stop' : 'Start observing'}
         </button>
+        <button onClick={handleReset}>Reset</button>
         <p>{currentMonth()}</p>
       </div>
     </div>
