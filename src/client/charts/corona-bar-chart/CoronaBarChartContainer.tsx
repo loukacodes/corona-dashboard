@@ -64,14 +64,13 @@ function CoronaBarChartContainer() {
         <h1>Corona cases per day during one year since outbreak</h1>
       </div>
       <div className={styles.body}>
-        <CoronaBarChart data={data} />
+        <CoronaBarChart data={data} currentMonth={currentMonth()}/>
       </div>
       <div className={styles.footer}>
         <button onClick={() => setStart(!start)}>
           {start ? 'Stop' : 'Start observing'}
         </button>
         <button onClick={handleReset}>Reset</button>
-        <p>{currentMonth()}</p>
       </div>
     </div>
   )
