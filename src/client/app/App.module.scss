@@ -1,0 +1,34 @@
+@import '../variables.scss';
+
+.root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  justify-content: space-between;
+  background-color: $grey2;
+  font-family: $font-family;
+}
+
+.body {
+  padding: 1rem;
+}
+
+svg {
+  overflow: visible;
+  display: block;
+  width: 100%;
+  height: 300px;
+  text {
+    fill: white;
+  }
+}
+
+button {
+  width: 100px;
+  border: 1px solid black;
+  margin: 0 auto 5px;
+}

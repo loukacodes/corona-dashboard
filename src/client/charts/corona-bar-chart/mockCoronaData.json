@@ -1,0 +1,74 @@
+[
+  {
+    "index": "0",
+    "country": "Honduras",
+    "date": "2020-01-01",
+    "casePerDay": 30,
+    "recovered": 59,
+    "death": 10,
+    "color": "#BCA0BC"
+  },
+  {
+    "index": "1",
+    "country": "Samoa",
+    "date": "2020-01-01",
+    "casePerDay": 570,
+    "recovered": 97,
+    "death": 10,
+    "color": "#3c2a3c"
+  },
+  {
+    "index": "2",
+    "country": "Algeria",
+    "date": "2020-01-01",
+    "casePerDay": 171,
+    "recovered": 45,
+    "death": 93,
+    "color": "#997099"
+  },
+  {
+    "index": "3",
+    "country": "East Timor",
+    "date": "2020-01-01",
+    "casePerDay": 345,
+    "recovered": 98,
+    "death": 87,
+    "color":"#6b4c6b"
+  },
+  {
+    "index": "4",
+    "country": "Taiwan",
+    "date": "2020-01-01",
+    "casePerDay": 128,
+    "recovered": 7,
+    "death": 79,
+    "color": "#a27ca2"
+  },
+  {
+    "index": "5",
+    "country": "Andorra",
+    "date": "2020-01-01",
+    "casePerDay": 158,
+    "recovered": 7,
+    "death": 79,
+    "color": "#8f668f"
+  },
+  {
+    "index": "6",
+    "country": "Latvia",
+    "date": "2020-01-01",
+    "casePerDay": 78,
+    "recovered": 7,
+    "death": 79,
+    "color": "#b394b3"
+  },
+  {
+    "index": "7",
+    "country": "Senegal",
+    "date": "2020-01-01",
+    "casePerDay": 528,
+    "recovered": 7,
+    "death": 79,
+    "color": "#483348"
+  }
+]
