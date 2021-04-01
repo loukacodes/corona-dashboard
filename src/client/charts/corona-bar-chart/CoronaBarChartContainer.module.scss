@@ -3,12 +3,9 @@
 .root {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  min-height: 100vh;
-  padding: 0;
-  margin: 0;
+  padding: 1rem;
+  margin: 1rem;
   box-sizing: border-box;
-  justify-content: space-between;
   background-color: $grey2;
   font-family: $font-family;
 }
@@ -23,13 +20,18 @@ svg {
   width: 100%;
   height: 300px;
   transition: all 1s ease-in-out;
-  text {
-    fill: white;
-  }
 }
 
-button {
-  width: 100px;
-  border: 1px solid black;
-  margin: 0 auto 5px;
+.footer{
+  display: flex;
+  justify-content: center;
+}
+
+.button {
+  min-width: 160px;
+  border-radius: 5px;
+  padding: 1rem 2rem; 
+  margin: 2rem;
+  background-color: rgba(255, 255, 255, .15);  
+  backdrop-filter: blur(5px);
 }

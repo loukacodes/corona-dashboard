@@ -9,95 +9,80 @@ interface Props {
 }
 
 const CoronaBarChart: React.FC<Props> = ({ data, currentMonth }) => {
+  const svgRef = useRef('')
   const wrapperRef = useRef()
   const dimensions = useResizeObserver(wrapperRef as any)
 
   useEffect(() => {
-    const svg = select('svg')
-
+    const svg = select(svgRef.current) as any
     if (dimensions === undefined) return
 
     // sorting the data
     data.sort((a, b) => b.casePerDay - a.casePerDay)
 
-    const yScale = (scaleBand()
-      .domain(data.map((c) => c.index))
-      .range([0, dimensions.height])
+    const yScale = scaleBand()
       .paddingInner(0.1)
-      .paddingOuter(0.1) as unknown) as any
+      .domain(data.map((d) => d.index))
+      .range([0, dimensions.height + 200])
 
     const xScale = scaleLinear()
       .domain([0, max(data as Iterable<any>, (c) => c.casePerDay)])
       .range([0, dimensions.width])
 
-    // join the bars to data
-    const bars = svg.selectAll('.bar').data(data)
-
     // plot the bars
-    bars
-      .attr('fill', (data: CoronaCase) => data.color)
-      .attr('y', (data: CoronaCase) => yScale(data.index))
+    svg
+      .selectAll('.bar')
+      .data(data, (d: CoronaCase) => d.country)
+      .join((enter: any) =>
+        enter.append('rect').attr('y', (d: CoronaCase) => yScale(d.index))
+      )
+      .attr('fill', (d: CoronaCase) => d.color)
       .attr('class', 'bar')
-      .attr('height', yScale.bandwidth)
-      .attr('width', (data: CoronaCase) => xScale(data.casePerDay))
       .attr('x', 0)
-
-    // enter the bars to DOM
-    bars
-      .enter()
-      .append('rect')
-      .attr('y', (data: CoronaCase) => yScale(data.index))
-      .attr('fill', (data: CoronaCase) => data.color)
-      .attr('class', 'bar')
       .attr('height', yScale.bandwidth)
       .transition()
       .duration(200)
-      .attr('width', (data: CoronaCase) => xScale(data.casePerDay))
-      .attr('x', 0)
-
-    // join labels to data
-    const labels = svg.selectAll('.label').data(data)
+      .attr('width', (d: CoronaCase) => xScale(d.casePerDay))
+      .attr('y', (d: CoronaCase) => yScale(d.index))
 
     // plot the labels
-    labels
-      .attr(
-        'y',
-        (data: CoronaCase) =>
-          (yScale(data.index) || 0) + yScale.bandwidth() / 2 + 5
+    svg
+      .selectAll('.label')
+      .data(data, (d: CoronaCase) => d.country)
+      .join((enter: any) =>
+        enter
+          .append('text')
+          .attr(
+            'y',
+            (d: CoronaCase) =>
+              (yScale(d.index) || 0) + yScale.bandwidth() / 2 + 5
+          )
       )
-      .text((data: CoronaCase) => ` ${data.country} (${data.casePerDay} cases)`)
+      .text((d: CoronaCase) => ` ${d.country} (${d.casePerDay} cases)`)
       .attr('class', 'label')
+      .style('fill', 'white')
       .attr('x', 10)
       .transition()
       .duration(200)
+      .attr(
+        'y',
+        (d: CoronaCase) => (yScale(d.index) || 0) + yScale.bandwidth() / 2 + 5
+      )
 
-    // enter labels to DOM
-    labels
-      .enter()
-      .append('text')
-      .attr(
-        'y',
-        (data: CoronaCase) =>
-          (yScale(data.index) || 0) + yScale.bandwidth() / 2 + 5
-      )
-      .text((data: CoronaCase) => ` ${data.country} (${data.casePerDay} cases)`)
-      .attr('class', 'label')
-      .attr('x', 10)
-      .transition()
-      .duration(200)
     // plot current month
     svg
       .select('.currentMonth')
-      .attr('x', dimensions.width - 150)
+      .attr('x', dimensions.width - 200)
       .attr('y', dimensions.height)
       .text(currentMonth)
       .style('fill', 'black')
       .style('font-size', '28px')
+
   }, [currentMonth, data, dimensions])
 
   return (
     <div ref={wrapperRef as any}>
-      <svg>
+      <svg ref={svgRef as any}>
         <text className="currentMonth"></text>
       </svg>
     </div>
