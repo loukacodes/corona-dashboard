@@ -20,20 +20,23 @@ function CoronaBarChartContainer() {
     if (start && iteration < DAYS_IN_YEAR) {
       setData(
         data.map((entry, index) => {
-          if (index === getRandomIncrement(data.length)) {
+          if (index === getRandomIncrement(data.length) && iteration % 10 === 0) {
             return {
               ...entry,
-              casePerDay: entry.casePerDay + getRandomIncrement(80),
+              casePerDay: entry.casePerDay + getRandomIncrement(500),
             }
           }
-          return entry
+          return {
+            ...entry,
+            casePerDay: entry.casePerDay + getRandomIncrement(10),
+          }
         })
       )
       setIteration(iteration + 1)
     }
   }
 
-  useInterval(updateData, 50)
+  useInterval(updateData, 100)
 
   const currentMonth = () => {
     switch (true) {

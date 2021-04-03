@@ -23,7 +23,7 @@ const CoronaBarChart: React.FC<Props> = ({ data, currentMonth }) => {
     const yScale = scaleBand()
       .paddingInner(0.1)
       .domain(data.map((d) => d.index))
-      .range([0, dimensions.height + 200])
+      .range([0, dimensions.height])
 
     const xScale = scaleLinear()
       .domain([0, max(data as Iterable<any>, (c) => c.casePerDay)])
