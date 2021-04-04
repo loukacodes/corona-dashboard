@@ -1,13 +1,10 @@
 import {
   axisBottom,
   axisLeft,
-  curveMonotoneX,
-
+  curveBasis,
   line,
   max,
-
-
-  scaleLinear
+  scaleLinear,
 } from 'd3'
 import { scaleTime } from 'd3-scale'
 import { select } from 'd3-selection'
@@ -20,11 +17,11 @@ interface LineChartProps {
 }
 
 const LineChart: React.FC<LineChartProps> = ({ data }) => {
+  
   const svgRef = useRef('')
   const wrapperRef = useRef()
   const dimensions = useResizeObserver(wrapperRef as any)
 
-  // Add X axis --> it is a date format
   useEffect(() => {
     if (!dimensions) return
 
@@ -34,82 +31,83 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
       .domain([new Date(data[0].Date), new Date(data[data.length - 1].Date)])
       .range([0, dimensions.width])
 
-    // Add Y axis
     const yScale = scaleLinear()
       .domain([0, max(data as Iterable<any>, (d) => d.Confirmed)])
       .range([dimensions.height, 0])
 
-    svg.append('g').call(axisLeft(yScale))
-
     const confirmedLine = line()
       .x((d: any) => xScale(new Date(d.Date)))
       .y((d: any) => yScale(d.Confirmed))
-      .curve(curveMonotoneX)
+      .curve(curveBasis)
 
     const deathLine = line()
       .x((d: any) => xScale(new Date(d.Date)))
       .y((d: any) => yScale(d.Deaths))
-      .curve(curveMonotoneX)
+      .curve(curveBasis)
 
     const recoveredLine = line()
       .x((d: any) => xScale(new Date(d.Date)))
       .y((d: any) => yScale(d.Recovered))
-      .curve(curveMonotoneX)
+      .curve(curveBasis)
 
-    // 3. Call the x axis in a group tag
+    // plot the axes
     svg
       .append('g')
-      .attr('class', 'x axis')
       .attr('transform', 'translate(0,' + dimensions.height + ')')
-      .call(axisBottom(xScale)) // Create an axis component with axisBottom
+      .attr('class', 'xAxis')
 
-    // 4. Call the y axis in a group tag
-    svg.append('g').attr('class', 'y axis').call(axisLeft(yScale)) // Create an axis component with axisLeft
+    svg.selectAll('.xAxis').transition().duration(100).call(axisBottom(xScale))
 
-    // 9. Append the path, bind the data, and call the line generator
-    svg
+    svg.append('g').attr('class', 'yAxis')
+    svg.selectAll('.yAxis').transition().duration(100).call(axisLeft(yScale)) // Create an axis component with axisLeft
+
+    const confirmedPaths = svg.selectAll('.confirmedLine').data([data], (d: SingleCountryData) => d.Confirmed)
+
+    confirmedPaths
+      .enter()
       .append('path')
-      .datum(data) // 10. Binds data to the line
-      .attr('class', 'line') // Assign a class for styling
-      .attr('d', confirmedLine) // 11. Calls the line generator
-      .style('fill', 'none')
-      .style('stroke', 'blue')
-      .style('stroke-width', 3)
+      .attr('class', 'confirmedLine')
+      .merge(confirmedPaths)
+      .transition()
+      .duration(300)
+      .attr('d', confirmedLine)
+      .attr('fill', 'none')
+      .attr('stroke', 'steelblue')
+      .attr('stroke-width', 3)
 
-    // 12. Appends a circle for each data-point
-    // svg
-    //   .selectAll('.dot')
-    //   .data(data)
-    //   .enter()
-    //   .append('circle') // Uses the enter().append() method
-    //   .attr('class', 'dot') // Assign a class for styling
-    //   .attr('cx', (d: any, i: any) => xScale(new Date(d.Date)))
-    //   .attr('cy', (d: SingleCountryData) => yScale(d.Confirmed))
-    //   .attr('r', 2)
+    const deathPaths = svg.selectAll('.deathLine').data([data], (d: SingleCountryData) => d.Deaths)
 
-    // death path
-    svg
+    deathPaths
+      .enter()
       .append('path')
-      .datum(data) // 10. Binds data to the line
-      .attr('class', 'line-death') // Assign a class for styling
-      .attr('d', deathLine) // 11. Calls the line generator
-      .style('fill', 'none')
-      .style('stroke', 'red')
-      .style('stroke-width', 3)
+      .attr('class', 'deathLine')
+      .merge(deathPaths)
+      .transition()
+      .duration(300)
+      .attr('d', deathLine)
+      .attr('fill', 'none')
+      .attr('stroke', 'red')
+      .attr('stroke-width', 3)
 
-    // recovered path
-    svg
+
+    const recoveredPaths = svg.selectAll('.recoveredLine').data([data], (d: SingleCountryData) => d.Recovered)
+
+    recoveredPaths
+      .enter()
       .append('path')
-      .datum(data) // 10. Binds data to the line
-      .attr('class', 'line-death') // Assign a class for styling
-      .attr('d', recoveredLine) // 11. Calls the line generator
-      .style('fill', 'none')
-      .style('stroke', 'green')
-      .style('stroke-width', 3)
+      .attr('class', 'recoveredLine')
+      .merge(recoveredPaths)
+      .transition()
+      .duration(300)
+      .attr('d', recoveredLine)
+      .attr('fill', 'none')
+      .attr('stroke', 'green')
+      .attr('stroke-width', 3)
+
   }, [data, dimensions])
 
   return (
-    <div ref={wrapperRef as any}>
+    <div ref={wrapperRef as any} id='lineChart'>
       <svg ref={svgRef as any}></svg>
     </div>
   )

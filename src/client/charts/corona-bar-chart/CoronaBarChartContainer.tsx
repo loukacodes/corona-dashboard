@@ -4,6 +4,7 @@ import { CoronaCase } from '../../model/corona-case'
 import styles from './CoronaBarChartContainer.module.scss'
 import CoronaBarChart from './CoronaBarChart'
 import mockCoronaData from './mockCoronaData.json'
+import Button from '../../common/Button'
 
 const getRandomIncrement = (num: number) => {
   return Math.floor(num * Math.random())
@@ -20,7 +21,10 @@ function CoronaBarChartContainer() {
     if (start && iteration < DAYS_IN_YEAR) {
       setData(
         data.map((entry, index) => {
-          if (index === getRandomIncrement(data.length) && iteration % 10 === 0) {
+          if (
+            index === getRandomIncrement(data.length) &&
+            iteration % 10 === 0
+          ) {
             return {
               ...entry,
               casePerDay: entry.casePerDay + getRandomIncrement(500),
@@ -82,18 +86,16 @@ function CoronaBarChartContainer() {
   return (
     <div className={styles.root}>
       <div className={styles.header}>
-        <h1>Corona cases per day during one year since outbreak</h1>
+        <h3>Corona cases per day during one year since outbreak</h3>
       </div>
       <div className={styles.body}>
         <CoronaBarChart data={data} currentMonth={currentMonth()} />
       </div>
       <div className={styles.footer}>
-        <button className={styles.button} onClick={toggleStart}>
+        <Button onClick={toggleStart}>
           {start ? 'Stop' : 'Start observing'}
-        </button>
-        <button className={styles.button} onClick={handleReset}>
-          Reset
-        </button>
+        </Button>
+        <Button onClick={handleReset}>Reset</Button>
       </div>
     </div>
   )

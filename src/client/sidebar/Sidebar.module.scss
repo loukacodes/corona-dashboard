@@ -1,0 +1,14 @@
+@import '../variables.scss';
+
+.root {
+  height: 100vh;
+  width: $side-bar-width;
+  background-color: $old-mauve;
+  position: fixed;
+  left: 0;
+  top: $nav-bar-height;
+  z-index: $second-most;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

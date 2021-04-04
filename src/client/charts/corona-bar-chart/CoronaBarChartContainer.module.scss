@@ -1,12 +1,11 @@
 @import '../../variables.scss';
 
 .root {
+  width: 100%;
   display: flex;
   flex-direction: column;
   padding: 1rem;
-  margin: 1rem;
   box-sizing: border-box;
-  background-color: $grey2;
   font-family: $font-family;
 }
 
@@ -25,13 +24,4 @@ svg {
 .footer{
   display: flex;
   justify-content: center;
-}
-
-.button {
-  min-width: 160px;
-  border-radius: 5px;
-  padding: 1rem 2rem; 
-  margin: 2rem;
-  background-color: rgba(255, 255, 255, .15);  
-  backdrop-filter: blur(5px);
 }

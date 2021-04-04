@@ -1,17 +1,17 @@
 @import '../../variables.scss';
 
 .root {
+  width: 100%;
   display: flex;
   flex-direction: column;
   padding: 1rem;
   margin: 1rem;
   box-sizing: border-box;
-  background-color: $grey2;
   font-family: $font-family;
 }
 
 .body {
-  padding: 1rem;
+  padding: 3rem;
 }
 
 svg {
@@ -20,4 +20,53 @@ svg {
   width: 100%;
   height: 300px;
   transition: all 1s ease-in-out;
+}
+
+.radioButtonGroup {
+  margin-top: 2rem;
+  position: relative;
+  width: fit-content;
+  transition: all 0.5s ease-in-out 0.1s;
+}
+
+.country {
+  margin: 0;
+  border-radius: 0;
+  transition: all 0.5s ease-in-out 0.1s;
+
+  &:first-of-type {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+
+  &:last-of-type {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+}
+
+.slider {
+  position: absolute;
+  height: 100%;
+  top: 0;
+  width: 33.33%;
+  border: 1px solid;
+  box-sizing: border-box;
+  transition: all 0.5s ease-in-out 0.1s;
+  z-index: 10;
+}
+
+.slider.vietnam {
+  left: 1px;
+  border-radius: 5px 0 0 5px ;
+}
+
+.slider.japan {
+  left: calc(33.33% - 1px);
+  border-radius: 0;
+}
+
+.slider.spain {
+  left: calc(66.66% - 1px);
+  border-radius: 0 5px 5px 0;
 }
