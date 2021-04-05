@@ -9,7 +9,9 @@
   box-shadow: 0 0.5rem 1rem 0 $xiketic;
   z-index: $top-most;
   text-transform: uppercase;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   font-weight: bold;
+  padding: 0 2rem;
+  box-sizing: border-box;
 }

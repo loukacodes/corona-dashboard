@@ -4,13 +4,13 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 1rem;
+  padding: 2rem;
   box-sizing: border-box;
   font-family: $font-family;
 }
 
 .body {
-  padding: 1rem;
+  margin: 1rem 0;
 }
 
 svg {
@@ -24,4 +24,5 @@ svg {
 .footer{
   display: flex;
   justify-content: space-between;
+  margin-top: 2rem;
 }

@@ -1,0 +1,12 @@
+@import '../variables.scss';
+
+.circleStyle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100%;
+  background-color: $lapis-lazuli;
+  width: 48px;
+  height: 48px;
+  overflow: hidden;
+}
