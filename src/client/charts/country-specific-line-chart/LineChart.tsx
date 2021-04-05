@@ -56,7 +56,7 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
       .attr('transform', 'translate(0,' + dimensions.height + ')')
       .attr('class', 'xAxis')
 
-    svg.selectAll('.xAxis').transition().duration(100).call(axisBottom(xScale))
+    svg.selectAll('.xAxis').transition().duration(100).call(axisBottom(xScale).ticks(7))
 
     svg.append('g').attr('class', 'yAxis')
     svg.selectAll('.yAxis').transition().duration(100).call(axisLeft(yScale)) // Create an axis component with axisLeft

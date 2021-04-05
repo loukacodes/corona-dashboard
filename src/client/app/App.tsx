@@ -19,7 +19,7 @@ function App() {
             </Card>
             <Card>Under construction</Card>
             <Card>Under construction</Card>
-            <Card extraClassName={styles.somethingMore}>Under construction</Card>
+            <Card extraClassName={styles.underConstruction}>Under construction</Card>
           </div>
           <div className={styles.row}>
             <Card>Under construction</Card>

@@ -93,7 +93,7 @@ const CoronaBarChart: React.FC<Props> = ({ data, currentMonth }) => {
     svg
       .select('.currentMonth')
       .attr('x', dimensions.width - 200)
-      .attr('y', dimensions.height)
+      .attr('y', dimensions.height - 20)
       .text(currentMonth)
       .style('fill', textColor)
       .style('font-size', '28px')
