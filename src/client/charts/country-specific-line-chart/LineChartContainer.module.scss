@@ -8,10 +8,12 @@
   margin: 1rem;
   box-sizing: border-box;
   font-family: $font-family;
+  position: relative;
 }
 
 .body {
   padding: 3rem;
+  overflow: hidden;
 }
 
 svg {
@@ -68,4 +70,19 @@ svg {
 .slider.spain {
   left: calc(66.66% - 1px);
   border-radius: 0 5px 5px 0;
+}
+
+.labels {
+  position: absolute;
+  top: 12rem;
+  left: 6rem;
+
+  .labelWrapper {
+    display: flex;
+    align-items: center;
+
+    .label {
+      margin-left: 1rem;
+    }
+  }
 }

@@ -16,6 +16,10 @@ interface LineChartProps {
   data: SingleCountryData[]
 }
 
+export const confirmedCasesColor = '#3A7CA5'
+export const deathCasesColor = '#DF2935'
+export const recoveredCasesColor = '#018E42'
+
 const LineChart: React.FC<LineChartProps> = ({ data }) => {
   
   const svgRef = useRef('')
@@ -72,7 +76,7 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
       .duration(300)
       .attr('d', confirmedLine)
       .attr('fill', 'none')
-      .attr('stroke', 'steelblue')
+      .attr('stroke', confirmedCasesColor)
       .attr('stroke-width', 3)
 
     const deathPaths = svg.selectAll('.deathLine').data([data], (d: SingleCountryData) => d.Deaths)
@@ -86,7 +90,7 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
       .duration(300)
       .attr('d', deathLine)
       .attr('fill', 'none')
-      .attr('stroke', 'red')
+      .attr('stroke', deathCasesColor)
       .attr('stroke-width', 3)
 
 
@@ -101,7 +105,7 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
       .duration(300)
       .attr('d', recoveredLine)
       .attr('fill', 'none')
-      .attr('stroke', 'green')
+      .attr('stroke', recoveredCasesColor)
       .attr('stroke-width', 3)
 
   }, [data, dimensions])
