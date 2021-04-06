@@ -1,6 +1,6 @@
-import { axisBottom, axisLeft, curveBasis, line, max, scaleLinear } from 'd3'
+import { axisBottom, axisLeft, curveBasis, format, line, max, scaleLinear } from 'd3'
 import { scaleOrdinal, scaleTime } from 'd3-scale'
-import { select, selectAll } from 'd3-selection'
+import { select } from 'd3-selection'
 import { legendColor } from 'd3-svg-legend'
 import React, { useEffect, useRef } from 'react'
 import useResizeObserver from '../../hooks/useResizeObserver'
@@ -20,7 +20,7 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
   const dimensions = useResizeObserver(wrapperRef as any)
 
   useEffect(() => {
-    if (!dimensions) return
+    if (!dimensions || !data) return
 
     const svg = select(svgRef.current) as any
     // prevent duplicate re-rendering
@@ -58,7 +58,20 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
     svg.selectAll('.xAxis').transition().duration(300).call(axisBottom(xScale).ticks(7))
 
     svg.append('g').attr('class', 'yAxis')
-    svg.selectAll('.yAxis').transition().duration(300).call(axisLeft(yScale)) // Create an axis component with axisLeft
+    svg
+      .selectAll('.yAxis')
+      .transition()
+      .duration(300)
+      .call(
+        axisLeft(yScale).tickFormat((d: any) => {
+          if (d / 1000000 >= 1) {
+            d = d / 1000000 + 'M'
+          } else if (d / 1000 >= 1) {
+            d = d / 1000 + 'K'
+          } 
+          return d
+        })
+      )
 
     const confirmedPaths = svg
       .selectAll('.confirmedLine')
@@ -124,7 +137,6 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
       .selectAll('text')
       .attr('fill', '#e5ffdeff')
       .attr('font-weight', 300)
-    console.log(svg)
   }, [data, dimensions])
 
   return (

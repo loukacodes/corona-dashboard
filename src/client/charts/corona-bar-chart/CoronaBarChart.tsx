@@ -1,4 +1,4 @@
-import { axisBottom, axisLeft, max, scaleBand, scaleLinear, select, selectAll } from 'd3'
+import { axisBottom, max, scaleBand, scaleLinear, select } from 'd3'
 import React, { useEffect, useRef } from 'react'
 import lightenColor from '../../helpers/lightenColor'
 import useResizeObserver from '../../hooks/useResizeObserver'
@@ -6,13 +6,12 @@ import { CoronaCase } from '../../model/corona-case'
 
 interface Props {
   data: CoronaCase[]
-  currentMonth: string
 }
 
 const baseBarColor = '#1c3d56'
 const textColor = '#e5ffdeff'
 
-const CoronaBarChart: React.FC<Props> = ({ data, currentMonth }) => {
+const CoronaBarChart: React.FC<Props> = ({ data }) => {
   const svgRef = useRef('')
   const wrapperRef = useRef()
   const dimensions = useResizeObserver(wrapperRef as any)
@@ -47,7 +46,11 @@ const CoronaBarChart: React.FC<Props> = ({ data, currentMonth }) => {
       .attr('transform', `translate(0, ${dimensions.height})`)
       .attr('class', 'xAxis')
 
-    svg.selectAll('.xAxis').transition().duration(10).call(axisBottom(xScale))
+    svg
+      .selectAll('.xAxis')
+      .transition()
+      .duration(10)
+      .call(axisBottom(xScale).ticks(7))
 
     // plot the bars
     const bars = svg.selectAll('.bar')
@@ -64,7 +67,6 @@ const CoronaBarChart: React.FC<Props> = ({ data, currentMonth }) => {
       .duration(200)
       .attr('width', (d: CoronaCase) => xScale(d.casePerDay))
       .attr('y', (d: CoronaCase) => yScale(d.index))
-    bars.exit().remove()
 
     // plot the labels
     const labels = svg.selectAll('.label')
@@ -89,17 +91,7 @@ const CoronaBarChart: React.FC<Props> = ({ data, currentMonth }) => {
         'y',
         (d: CoronaCase) => (yScale(d.index) || 0) + yScale.bandwidth() / 2 + 5
       )
-    labels.exit().remove()
-
-    // plot current month
-    svg
-      .select('.currentMonth')
-      .attr('x', dimensions.width - 200)
-      .attr('y', dimensions.height - 20)
-      .text(currentMonth)
-      .style('fill', textColor)
-      .style('font-size', '28px')
-  }, [currentMonth, updatedData, dimensions])
+  }, [updatedData, dimensions])
 
   return (
     <div ref={wrapperRef as any}>

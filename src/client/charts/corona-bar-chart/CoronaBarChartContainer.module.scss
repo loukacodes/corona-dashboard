@@ -9,6 +9,12 @@
   font-family: $font-family;
 }
 
+.currentMonth {
+  display: flex;
+  justify-content: flex-end;
+  font-weight: bold;
+}
+
 .body {
   margin: 1rem 0;
 }

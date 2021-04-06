@@ -87,9 +87,10 @@ function CoronaBarChartContainer() {
     <div className={styles.root}>
       <div className={styles.header}>
         <h3>Corona cases per day during one year since outbreak (mock data)</h3>
+        <div className={styles.currentMonth}>{currentMonth()}</div>
       </div>
       <div className={styles.body}>
-        <CoronaBarChart data={data} currentMonth={currentMonth()} />
+        <CoronaBarChart data={data} />
       </div>
       <div className={styles.footer}>
         <Button onClick={toggleStart}>
