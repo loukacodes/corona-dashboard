@@ -95,7 +95,7 @@ const LineChartContainer: React.FC = () => {
 
   return (
     <div className={styles.root}>
-      <h3>Country specific line chart</h3>
+      <h3>Country specific line chart (real data)</h3>
       <CountrySelection />
       <div className={styles.labels}>
         <CaseLabel typeOfCase="confirmed" />
