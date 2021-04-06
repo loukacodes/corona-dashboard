@@ -1,4 +1,4 @@
-import { axisBottom, axisLeft, max, scaleBand, scaleLinear, select } from 'd3'
+import { axisBottom, axisLeft, max, scaleBand, scaleLinear, select, selectAll } from 'd3'
 import React, { useEffect, useRef } from 'react'
 import lightenColor from '../../helpers/lightenColor'
 import useResizeObserver from '../../hooks/useResizeObserver'
@@ -28,6 +28,8 @@ const CoronaBarChart: React.FC<Props> = ({ data, currentMonth }) => {
 
   useEffect(() => {
     const svg = select(svgRef.current) as any
+    // prevent duplicate re-rendering
+    svg.selectAll('g').remove()
     if (dimensions === undefined) return
 
     const yScale = scaleBand()
@@ -45,7 +47,7 @@ const CoronaBarChart: React.FC<Props> = ({ data, currentMonth }) => {
       .attr('transform', `translate(0, ${dimensions.height})`)
       .attr('class', 'xAxis')
 
-    svg.selectAll('.xAxis').transition().duration(100).call(axisBottom(xScale))
+    svg.selectAll('.xAxis').transition().duration(10).call(axisBottom(xScale))
 
     // plot the bars
     const bars = svg.selectAll('.bar')
