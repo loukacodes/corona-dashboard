@@ -1,11 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import Button from '../../common/Button'
 import { SingleCountryData } from './corona-country'
-import LineChart, {
-  confirmedCasesColor,
-  deathCasesColor,
-  recoveredCasesColor
-} from './LineChart'
+import LineChart from './LineChart'
 import styles from './LineChartContainer.module.scss'
 
 const LineChartContainer: React.FC = () => {
@@ -20,27 +16,22 @@ const LineChartContainer: React.FC = () => {
   )
   const storageID = `country-specific-${selectedCountry}`
 
-  const loadData = useCallback(async () => {
+  const loadData = useCallback(async (selectedCountry) => {
     const response = await fetch(
       `https://api.covid19api.com/dayone/country/${selectedCountry}`,
       {}
     )
     const rawData = (await response.json()) as SingleCountryData[]
     setData(rawData)
-    localStorage.setItem(storageID, JSON.stringify(rawData))
-  }, [selectedCountry, storageID])
+    setSelectedCountry(selectedCountry)
+  }, [])
 
   useEffect(() => {
-    const storedData = localStorage.getItem(storageID)
-    if (storedData !== null) {
-      setData(JSON.parse(storedData))
-    }
-    loadData()
+    loadData(selectedCountry)
   }, [loadData, selectedCountry, storageID])
 
-  const handleSelectCountry = async (country: SupportedCountries) => {
-    setSelectedCountry(country)
-    await loadData()
+  const handleSelectCountry = (country: SupportedCountries) => {
+    loadData(country)
   }
 
   const CountrySelection = () => {
