@@ -1,13 +1,15 @@
 import {
   axisBottom,
   axisLeft,
+  color,
   curveBasis,
   line,
   max,
   scaleLinear,
 } from 'd3'
-import { scaleTime } from 'd3-scale'
+import { scaleOrdinal, scaleTime } from 'd3-scale'
 import { select } from 'd3-selection'
+import { legendColor } from 'd3-svg-legend'
 import React, { useEffect, useRef } from 'react'
 import useResizeObserver from '../../hooks/useResizeObserver'
 import { SingleCountryData } from './corona-country'
@@ -107,6 +109,24 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
       .attr('fill', 'none')
       .attr('stroke', recoveredCasesColor)
       .attr('stroke-width', 3)
+
+    const color = scaleOrdinal([
+      confirmedCasesColor,
+      deathCasesColor,
+      recoveredCasesColor,
+    ])
+
+    // set color domain
+    color.domain(['confirmed', 'death', 'recovered'])
+    // set legends
+    const legend = legendColor().shape('line').scale(color)
+    svg
+      .append('g')
+      .attr('transform', `translate(20, 20)`)
+      .call(legend)
+      .selectAll('text')
+      .attr('fill', '#e5ffdeff')
+      .attr('font-weight', '300')
 
   }, [data, dimensions])
 
