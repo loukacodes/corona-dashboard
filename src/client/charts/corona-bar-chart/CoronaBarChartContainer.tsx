@@ -66,7 +66,7 @@ function CoronaBarChartContainer() {
         return 'January - 2021'
       case iteration >= 300 && iteration <= 330:
         return 'February - 2021'
-      case iteration >= 330 && iteration <= 360:
+      case iteration >= 330:
         return 'March - 2021'
       default:
         return ''

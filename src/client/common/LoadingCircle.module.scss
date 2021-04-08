@@ -1,0 +1,29 @@
+@import '../variables.scss';
+
+.loading {
+  width: 90px;
+  animation: circulate 3s linear infinite;
+  margin: 0 2em;
+  .loadingCircle {
+    stroke-dashoffset: 0;
+    stroke-dasharray: 300;
+    stroke-width: 15;
+    stroke-miterlimit: 10;
+    stroke-linecap: round;
+    stroke: $nyanza;
+    fill: transparent;
+    animation: loading 2s linear infinite;
+  }
+}
+
+@keyframes circulate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes loading {
+  to {
+    stroke-dashoffset: -600;
+  }
+}

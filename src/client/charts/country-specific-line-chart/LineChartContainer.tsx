@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import Button from '../../common/Button'
+import LoadingCircle from '../../common/LoadingCircle'
+import { removeKeys } from '../../helpers/removeKeys'
 import { SingleCountryData } from './corona-country'
 import LineChart from './LineChart'
 import styles from './LineChartContainer.module.scss'
@@ -10,25 +12,32 @@ const LineChartContainer: React.FC = () => {
     Japan = 'japan',
     Spain = 'spain',
   }
+
+  type FetchStatus = 'pending' | 'success' | 'error' | 'idle'
+
   const [data, setData] = useState<SingleCountryData[] | null>(null)
   const [selectedCountry, setSelectedCountry] = useState<SupportedCountries>(
     SupportedCountries.Vietnam
   )
-  const storageID = `country-specific-${selectedCountry}`
+  const [fetchStatus, setFetchStatus] = useState<FetchStatus>('idle')
 
   const loadData = useCallback(async (selectedCountry) => {
+    const allowedKeys = ['Confirmed', 'Country', 'Deaths', 'Recovered', 'Date']
+    setFetchStatus('pending')
     const response = await fetch(
       `https://api.covid19api.com/dayone/country/${selectedCountry}`,
       {}
     )
-    const rawData = (await response.json()) as SingleCountryData[]
-    setData(rawData)
+    const rawData = await response.json()
+    const data = removeKeys<SingleCountryData>(rawData, allowedKeys)
+    setData(data)
     setSelectedCountry(selectedCountry)
+    setFetchStatus('success')
   }, [])
 
   useEffect(() => {
     loadData(selectedCountry)
-  }, [loadData, selectedCountry, storageID])
+  }, [loadData, selectedCountry])
 
   const handleSelectCountry = (country: SupportedCountries) => {
     loadData(country)
@@ -60,7 +69,11 @@ const LineChartContainer: React.FC = () => {
     <div className={styles.root}>
       <h3>Country specific line chart (real data)</h3>
       <CountrySelection />
-      <div className={styles.body}>{data && <LineChart data={data} />}</div>
+      <div className={styles.body}>
+        {fetchStatus === 'idle' && <div>Select a country to view</div>}
+        {fetchStatus === 'pending' && <LoadingCircle />}
+        {fetchStatus === 'success' && data && <LineChart data={data} />}
+      </div>
     </div>
   )
 }

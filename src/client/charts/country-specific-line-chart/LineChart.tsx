@@ -1,10 +1,11 @@
-import { axisBottom, axisLeft, curveBasis, format, line, max, scaleLinear } from 'd3'
+import { axisBottom, axisLeft, curveBasis, line, max, scaleLinear } from 'd3'
 import { scaleOrdinal, scaleTime } from 'd3-scale'
 import { select } from 'd3-selection'
 import { legendColor } from 'd3-svg-legend'
 import React, { useEffect, useRef } from 'react'
 import useResizeObserver from '../../hooks/useResizeObserver'
 import { SingleCountryData } from './corona-country'
+import styles from './LineChart.module.scss'
 
 interface LineChartProps {
   data: SingleCountryData[]
@@ -58,6 +59,8 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
     svg.selectAll('.xAxis').transition().duration(300).call(axisBottom(xScale).ticks(7))
 
     svg.append('g').attr('class', 'yAxis')
+
+    // shorten y axis value
     svg
       .selectAll('.yAxis')
       .transition()
@@ -140,7 +143,7 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
   }, [data, dimensions])
 
   return (
-    <div ref={wrapperRef as any} id="lineChart">
+    <div ref={wrapperRef as any} className={styles.root}>
       <svg ref={svgRef as any}></svg>
     </div>
   )
