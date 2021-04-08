@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import Button from '../../common/Button'
-import LoadingCircle from '../../common/LoadingCircle'
 import { removeKeys } from '../../helpers/removeKeys'
 import { SingleCountryData } from './corona-country'
 import LineChart from './LineChart'
@@ -13,17 +12,13 @@ const LineChartContainer: React.FC = () => {
     Spain = 'spain',
   }
 
-  type FetchStatus = 'pending' | 'success' | 'error' | 'idle'
-
   const [data, setData] = useState<SingleCountryData[] | null>(null)
   const [selectedCountry, setSelectedCountry] = useState<SupportedCountries>(
     SupportedCountries.Vietnam
   )
-  const [fetchStatus, setFetchStatus] = useState<FetchStatus>('idle')
 
   const loadData = useCallback(async (selectedCountry) => {
     const allowedKeys = ['Confirmed', 'Country', 'Deaths', 'Recovered', 'Date']
-    setFetchStatus('pending')
     const response = await fetch(
       `https://api.covid19api.com/dayone/country/${selectedCountry}`,
       {}
@@ -32,7 +27,6 @@ const LineChartContainer: React.FC = () => {
     const data = removeKeys<SingleCountryData>(rawData, allowedKeys)
     setData(data)
     setSelectedCountry(selectedCountry)
-    setFetchStatus('success')
   }, [])
 
   useEffect(() => {
@@ -70,9 +64,7 @@ const LineChartContainer: React.FC = () => {
       <h3>Country specific line chart (real data)</h3>
       <CountrySelection />
       <div className={styles.body}>
-        {fetchStatus === 'idle' && <div>Select a country to view</div>}
-        {fetchStatus === 'pending' && <LoadingCircle />}
-        {fetchStatus === 'success' && data && <LineChart data={data} />}
+        {data && <LineChart data={data} />}
       </div>
     </div>
   )
