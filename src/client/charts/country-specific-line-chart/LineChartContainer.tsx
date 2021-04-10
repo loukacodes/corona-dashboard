@@ -12,12 +12,16 @@ const LineChartContainer: React.FC = () => {
     Spain = 'spain',
   }
 
+  type FetchStatus = 'pending' | 'success' | 'error' | 'idle'
+
   const [data, setData] = useState<SingleCountryData[] | null>(null)
   const [selectedCountry, setSelectedCountry] = useState<SupportedCountries>(
     SupportedCountries.Vietnam
   )
+  const [fetchStatus, setFetchStatus] = useState<FetchStatus>('idle')
 
   const loadData = useCallback(async (selectedCountry) => {
+    setFetchStatus('pending')
     const allowedKeys = ['Confirmed', 'Country', 'Deaths', 'Recovered', 'Date']
     const response = await fetch(
       `https://api.covid19api.com/dayone/country/${selectedCountry}`,
@@ -27,6 +31,7 @@ const LineChartContainer: React.FC = () => {
     const data = removeKeys<SingleCountryData>(rawData, allowedKeys)
     setData(data)
     setSelectedCountry(selectedCountry)
+    setFetchStatus('success')
   }, [])
 
   useEffect(() => {
@@ -59,12 +64,22 @@ const LineChartContainer: React.FC = () => {
     )
   }
 
+  const chartClassNames = `${
+    fetchStatus === 'pending'
+      ? styles.showLoadingIndicator
+      : styles.hideLoadingIndicator
+  } ${styles.chart}`
+
   return (
     <div className={styles.root}>
       <h3>Country specific line chart (real data)</h3>
       <CountrySelection />
       <div className={styles.body}>
-        {data && <LineChart data={data} />}
+        {fetchStatus === 'idle' && <div>Select a country to view</div>}
+        <div className={chartClassNames}>
+          <div className={styles.loadingIndicator}></div>
+          {data && <LineChart data={data} />}
+        </div>
       </div>
     </div>
   )

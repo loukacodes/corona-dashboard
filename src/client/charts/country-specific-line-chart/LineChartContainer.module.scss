@@ -90,3 +90,34 @@ svg {
     }
   }
 }
+
+.chart {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.showLoadingIndicator {
+  background: rgba($color: #000000, $alpha: 0.1);
+  width: 100%;
+  height: 100%;
+  .loadingIndicator {
+    visibility: visible;
+  }
+}
+
+.hideLoadingIndicator {
+  .loadingIndicator {
+    visibility: hidden;
+  }
+}
+
+.loadingIndicator {
+  position: absolute;
+  &:before {
+    content: 'Loading...';
+    display: block;
+    font-size: 2rem;
+  }
+}
