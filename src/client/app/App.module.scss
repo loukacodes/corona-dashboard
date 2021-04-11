@@ -16,6 +16,9 @@ body {
   background-color: $xiketic;
   font-family: $font-family;
   color: $nyanza;
+  background: linear-gradient(0deg, $cafe-au-lait, $green-cyan),
+    linear-gradient(120deg, $lapis-lazuli, $green-cyan),
+    linear-gradient(240deg, $cafe-au-lait, $steel-blue);
 }
 
 .body {
@@ -30,7 +33,6 @@ body {
   position: relative;
   margin-left: $side-bar-width;
   margin-top: $nav-bar-height;
-  background-color: $xiketic;
   @media (max-width: 1024px) {
     margin-left: 0;
   }

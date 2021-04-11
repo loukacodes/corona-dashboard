@@ -2,11 +2,14 @@
 
 .root {
   background-color: $old-mauve;
-  border-radius: 5px;
+  border-radius: $borderRadius;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 1rem;
+  background-color: $backgroundColor;
+  backdrop-filter: blur(5px);
+  box-shadow: $boxShadow;
   @media (max-width: 1024px) {
     padding: 0.5rem;
     margin: 0.5rem 0;

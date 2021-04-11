@@ -3,7 +3,6 @@
 .root {
   height: 100vh;
   width: $side-bar-width;
-  background-color: $old-mauve;
   position: fixed;
   left: 0;
   top: $nav-bar-height;
@@ -11,6 +10,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: $backgroundColor;
+  backdrop-filter: blur(5px);
+  box-shadow: $boxShadow;
   @media (max-width: 1024px) {
     display: none;
   }

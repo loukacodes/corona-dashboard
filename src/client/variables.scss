@@ -2,8 +2,12 @@
 $nyanza: #e5ffdeff;
 $lapis-lazuli: #2f6690ff;
 $steel-blue: #3a7ca5ff;
+$green-cyan: #2d936cff;
+$cafe-au-lait: #a38560ff;
 $old-mauve: #5d2a42ff;
 $xiketic: #18020cff;
+$backgroundColor: rgba(255, 255, 255, 0.15);
+
 
 // FONTS
 $font-family: 'Roboto', sans-serif;
@@ -14,6 +18,8 @@ $font-size-sm: 12px;
 // OTHERS
 $nav-bar-height: 79px;
 $side-bar-width: 100px;
+$boxShadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+$borderRadius: 10px;
 
 // Z_INDICES
 $top-most: 3;
