@@ -1,7 +1,16 @@
-import { axisBottom, axisLeft, curveBasis, line, max, scaleLinear } from 'd3'
+import {
+  area,
+  axisBottom,
+  axisLeft,
+  curveBasis,
+  Line,
+  line,
+  max,
+  scaleLinear,
+} from 'd3'
 import { scaleOrdinal, scaleTime } from 'd3-scale'
 import { select } from 'd3-selection'
-import { legendColor } from 'd3-svg-legend'
+import { legendColor, legendSize } from 'd3-svg-legend'
 import React, { useEffect, useRef } from 'react'
 import useResizeObserver from '../../hooks/useResizeObserver'
 import { SingleCountryData } from './corona-country'
@@ -56,7 +65,11 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
       .attr('transform', `translate(0, ${dimensions.height})`)
       .attr('class', 'xAxis')
 
-    svg.selectAll('.xAxis').transition().duration(300).call(axisBottom(xScale).ticks(7))
+    svg
+      .selectAll('.xAxis')
+      .transition()
+      .duration(300)
+      .call(axisBottom(xScale).ticks(7))
 
     svg.append('g').attr('class', 'yAxis')
 
@@ -71,58 +84,68 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
             d = d / 1000000 + 'M'
           } else if (d / 1000 >= 1) {
             d = d / 1000 + 'K'
-          } 
+          }
           return d
         })
       )
 
-    const confirmedPaths = svg
-      .selectAll('.confirmedLine')
-      .data([data], (d: SingleCountryData) => d.Confirmed)
+    const plotLine = (
+      className: string,
+      type: 'Confirmed' | 'Deaths' | 'Recovered',
+      lineValue: Line<[number, number]>,
+      color: string
+    ) => {
+      const pathToPlot = svg
+        .selectAll(`.${className}`)
+        .data([data], (d: SingleCountryData) => d[type])
 
-    confirmedPaths
-      .enter()
-      .append('path')
-      .attr('class', 'confirmedLine')
-      .merge(confirmedPaths)
-      .transition()
-      .duration(300)
-      .attr('d', confirmedLine)
-      .attr('fill', 'none')
-      .attr('stroke', confirmedCasesColor)
-      .attr('stroke-width', 3)
+      pathToPlot
+        .enter()
+        .append('path')
+        .attr('class', className)
+        .merge(pathToPlot)
+        .transition()
+        .duration(300)
+        .attr('d', lineValue)
+        .attr('fill', 'none')
+        .attr('stroke', color)
+        .attr('stroke-width', 3)
+    }
 
-    const deathPaths = svg
-      .selectAll('.deathLine')
-      .data([data], (d: SingleCountryData) => d.Deaths)
+    plotLine('confirmedLine', 'Confirmed', confirmedLine, confirmedCasesColor)
+    plotLine('deathLine', 'Deaths', deathLine, deathCasesColor)
+    plotLine('recoveredLine', 'Recovered', recoveredLine, recoveredCasesColor)
 
-    deathPaths
-      .enter()
-      .append('path')
-      .attr('class', 'deathLine')
-      .merge(deathPaths)
-      .transition()
-      .duration(300)
-      .attr('d', deathLine)
-      .attr('fill', 'none')
-      .attr('stroke', deathCasesColor)
-      .attr('stroke-width', 3)
+    const plotArea = (
+      className: string,
+      type: 'Confirmed' | 'Deaths' | 'Recovered',
+      color: string
+    ) => {
+      const areaToFill = svg
+        .selectAll(`.${className}`)
+        .data([data], (d: SingleCountryData) => d[type])
 
-    const recoveredPaths = svg
-      .selectAll('.recoveredLine')
-      .data([data], (d: SingleCountryData) => d.Recovered)
+        const areaScale = area()
+          .x((data: any) => xScale(new Date(data.Date)))
+          .y0(dimensions.height)
+          .y1((data: any) => yScale(data[type]))
 
-    recoveredPaths
-      .enter()
-      .append('path')
-      .attr('class', 'recoveredLine')
-      .merge(recoveredPaths)
-      .transition()
-      .duration(300)
-      .attr('d', recoveredLine)
-      .attr('fill', 'none')
-      .attr('stroke', recoveredCasesColor)
-      .attr('stroke-width', 3)
+      areaToFill
+        .enter()
+        .append('path')
+        .attr('class', className)
+        .merge(areaToFill)
+        .transition()
+        .duration(300)
+        .attr('d', areaScale)
+        .attr('fill', color)
+        .attr('stroke-width', 0)
+        .attr('opacity', 0.3)
+    }
+
+    plotArea('confirmedArea', 'Confirmed', confirmedCasesColor)
+    plotArea('deathArea', 'Deaths', deathCasesColor)
+    plotArea('recoveredArea', 'Recovered', recoveredCasesColor)
 
     const color = scaleOrdinal([
       confirmedCasesColor,
@@ -136,10 +159,16 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
     const legendGroup = svg.append('g').attr('transform', `translate(20, 20)`)
     const legend = legendColor().shape('line').scale(color)
     legendGroup.call(legend)
+    // style legend texts
     legendGroup
       .selectAll('text')
       .attr('fill', '#e5ffdeff')
       .attr('font-weight', 300)
+    // style legend lines
+    legendGroup
+      .selectAll('line')
+      .attr('stroke-width', 5)
+      .attr('stroke-linecap', 'round')
   }, [data, dimensions])
 
   return (

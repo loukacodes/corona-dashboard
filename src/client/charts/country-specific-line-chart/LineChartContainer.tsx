@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Button from '../../common/Button'
 import { removeKeys } from '../../helpers/removeKeys'
 import { SingleCountryData } from './corona-country'
@@ -20,26 +20,34 @@ const LineChartContainer: React.FC = () => {
   )
   const [fetchStatus, setFetchStatus] = useState<FetchStatus>('idle')
 
-  const loadData = useCallback(async (selectedCountry) => {
-    setFetchStatus('pending')
-    const allowedKeys = ['Confirmed', 'Country', 'Deaths', 'Recovered', 'Date']
-    const response = await fetch(
-      `https://api.covid19api.com/dayone/country/${selectedCountry}`,
+  const fetchData = useRef(() => {})
+
+  const fetchDataFromSpecificCountry = (country: SupportedCountries) => {
+    return fetch(
+      `https://api.covid19api.com/dayone/country/${country}`,
       {}
     )
-    const rawData = await response.json()
-    const data = removeKeys<SingleCountryData>(rawData, allowedKeys)
-    setData(data)
-    setSelectedCountry(selectedCountry)
-    setFetchStatus('success')
-  }, [])
+  }
+
+  fetchData.current = () => {
+    setFetchStatus('pending')
+    const allowedKeys = ['Confirmed', 'Country', 'Deaths', 'Recovered', 'Date']
+    fetchDataFromSpecificCountry(selectedCountry).then((res) => {
+      return res.json()
+    }).then((rawData: any) => {
+      if (rawData === undefined) return
+      const data = removeKeys<SingleCountryData>(rawData, allowedKeys)
+      setData(data)
+      setFetchStatus('success')
+    })
+  }
 
   useEffect(() => {
-    loadData(selectedCountry)
-  }, [loadData, selectedCountry])
+    fetchData.current()
+  }, [selectedCountry])
 
   const handleSelectCountry = (country: SupportedCountries) => {
-    loadData(country)
+    setSelectedCountry(country)
   }
 
   const CountrySelection = () => {
