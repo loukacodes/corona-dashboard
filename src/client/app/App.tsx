@@ -1,4 +1,6 @@
+import classNames from 'classnames'
 import React from 'react'
+import { useState } from 'react'
 import CoronaBarChartContainer from '../charts/corona-bar-chart/CoronaBarChartContainer'
 import LineChartContainer from '../charts/country-specific-line-chart/LineChartContainer'
 import Button from '../common/Button'
@@ -7,14 +9,23 @@ import Navbar from '../navbar/Navbar'
 import Sidebar from '../sidebar/Sidebar'
 import styles from './App.module.scss'
 
-function App() {
+const App = () => {
   const handleClick = () => {
     // eslint-disable-next-line no-restricted-globals
     return (location.href = 'https://github.com/trangtmtran/corona-dashboard')
   }
+  const [currentMode, setCurrentMode] = useState<'light' | 'dark'>('light')
+  const handleChangeTheme = (mode: 'light' | 'dark') => {
+    console.log(mode)
+    setCurrentMode(mode)
+  }
   return (
-    <div className={styles.root}>
-      <Navbar />
+    <div
+      className={classNames(styles.root, {
+        [styles[`theme-${currentMode}`]]: currentMode,
+      })}
+    >
+      <Navbar handleChangeTheme={handleChangeTheme}/>
       <div className={styles.body}>
         <Sidebar />
         <div className={styles.content}>
